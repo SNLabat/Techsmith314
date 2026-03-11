@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Techsmith314 — Variety Streamer & Dungeon Master</title>
+  <meta name="description" content="Techsmith314 is a Twitch Partner and variety streamer. Catch live streams, watch the Ring and Maker D&D campaign, and join the community." />
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:  #FF6B1A;
+      --purple:  #8A2BE2;
+      --black:   #0a0a0a;
+      --surface: #111111;
+      --card:    #1a1a1a;
+      --border:  #2a2a2a;
+      --text:    #f0f0f0;
+      --muted:   #999999;
+      --glow-o:  rgba(255, 107, 26, 0.35);
+      --glow-p:  rgba(138, 43, 226, 0.35);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    img { max-width: 100%; display: block; }
+
+    /* ── Nav ───────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-logo img {
+      height: 40px;
+      width: 40px;
+      object-fit: contain;
+    }
+
+    .nav-logo span {
+      background: linear-gradient(135deg, var(--orange), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── Hero ─────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 30% 50%, var(--glow-o), transparent),
+        radial-gradient(ellipse 60% 50% at 70% 50%, var(--glow-p), transparent);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-logo {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      margin: 0 auto 1.5rem;
+      filter: drop-shadow(0 0 24px var(--glow-o));
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--orange) 0%, #cc88ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-tagline {
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .partner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(138, 43, 226, 0.18);
+      border: 1px solid rgba(138, 43, 226, 0.4);
+      color: #cc88ff;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 1rem;
+    }
+
+    .partner-badge::before {
+      content: '✦';
+      font-size: 0.65rem;
+    }
+
+    /* ── Sections shared ──────────────────────────────────── */
+    section { padding: 4rem 2rem; }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+      max-width: 560px;
+    }
+
+    /* ── Live Stream ──────────────────────────────────────── */
+    #stream { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .embed-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 */
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 40px rgba(255, 107, 26, 0.12), 0 0 80px rgba(138, 43, 226, 0.08);
+    }
+
+    .embed-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .live-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #ff4444;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .live-dot::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #ff4444;
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ── Ring and Maker ───────────────────────────────────── */
+    #ram .section-label { color: var(--purple); }
+
+    .ram-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .ram-grid { grid-template-columns: 1fr; }
+    }
+
+    .ram-desc {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .ram-desc p { color: var(--muted); line-height: 1.75; }
+
+    .ram-stat-row {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .ram-stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1.25rem;
+      flex: 1;
+      min-width: 110px;
+    }
+
+    .ram-stat-val {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--purple), #cc88ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .ram-stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+
+    /* ── About ────────────────────────────────────────────── */
+    #about { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    .about-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .about-card:hover {
+      border-color: var(--orange);
+      box-shadow: 0 0 20px var(--glow-o);
+    }
+
+    .about-icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .about-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+
+    .about-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+    .stat-highlight {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--orange), #ffaa66);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    /* ── Connect ──────────────────────────────────────────── */
+    #connect { text-align: center; }
+
+    .social-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2.5rem;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .social-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+    .social-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--orange);
+      box-shadow: 0 4px 20px var(--glow-o);
+      color: var(--orange);
+    }
+
+    .social-btn.twitch:hover {
+      border-color: #9146ff;
+      box-shadow: 0 4px 20px rgba(145, 70, 255, 0.35);
+      color: #9146ff;
+    }
+
+    .social-btn.patreon:hover {
+      border-color: #ff424d;
+      box-shadow: 0 4px 20px rgba(255, 66, 77, 0.35);
+      color: #ff424d;
+    }
+
+    /* ── Footer ───────────────────────────────────────────── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .footer-logo {
+      height: 36px;
+      object-fit: contain;
+      opacity: 0.7;
+    }
+
+    footer p { font-size: 0.8rem; color: var(--muted); }
+
+    .footer-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0.5rem 0;
+    }
+
+    /* ── Orange divider line ──────────────────────────────── */
+    .accent-line {
+      height: 3px;
+      background: linear-gradient(90deg, var(--orange), var(--purple));
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#">
+        <img src="Logo.png" alt="Techsmith314 logo" />
+        <span>Techsmith314</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#stream">Live</a></li>
+        <li><a href="#ram">Ring &amp; Maker</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#connect">Connect</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="accent-line"></div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <img class="hero-logo" src="Logo.png" alt="Techsmith314" />
+      <h1>Techsmith314</h1>
+      <p class="hero-tagline">Variety Streamer · Dungeon Master · Twitch Partner</p>
+      <p class="hero-tagline" style="font-size:0.95rem;">Positive vibes, low salt, and a whole lot of laughs — come hang out.</p>
+      <span class="partner-badge">Twitch Partner</span>
+    </div>
+  </section>
+
+  <!-- Live Stream -->
+  <section id="stream">
+    <div class="section-inner">
+      <p class="section-label">Watch Live</p>
+      <h2 class="section-title">Catch the Stream</h2>
+      <p class="section-sub">Techsmith314 goes live regularly with a variety of games. Check in and hang with the community.</p>
+      <div class="live-dot">Live on Twitch</div>
+      <div class="embed-wrap">
+        <iframe
+          id="twitch-embed"
+          src=""
+          allowfullscreen
+          title="Techsmith314 Twitch Stream">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ring and Maker -->
+  <section id="ram">
+    <div class="section-inner">
+      <p class="section-label">D&amp;D Campaign</p>
+      <h2 class="section-title">Ring and Maker</h2>
+      <p class="section-sub">Techsmith314 takes the Dungeon Master's seat for an original D&amp;D campaign — now airing on YouTube.</p>
+      <div class="ram-grid">
+        <div>
+          <div class="embed-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/videoseries?list=PL1TfRwR30SrW9ruKG7hM-803MU8vmO5YV"
+              allowfullscreen
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              title="Ring and Maker D&D Campaign Playlist">
+            </iframe>
+          </div>
+        </div>
+        <div class="ram-desc">
+          <h3 style="font-size:1.4rem; font-weight:800;">A New Adventure Begins</h3>
+          <p>
+            Ring and Maker (R.A.M.) is Techsmith314's original Dungeons &amp; Dragons campaign, where he steps out from behind the controller and into the role of Dungeon Master. Episode one has just dropped — the story is only getting started.
+          </p>
+          <p>
+            Follow the campaign on YouTube and watch the world come to life one session at a time. Catch it live on Twitch and then relive every moment in the playlist below.
+          </p>
+          <div class="ram-stat-row">
+            <div class="ram-stat">
+              <div class="ram-stat-val">EP. 1</div>
+              <div class="ram-stat-label">Now Live</div>
+            </div>
+            <div class="ram-stat">
+              <div class="ram-stat-val">D&amp;D</div>
+              <div class="ram-stat-label">5th Edition</div>
+            </div>
+            <div class="ram-stat">
+              <div class="ram-stat-val">DM</div>
+              <div class="ram-stat-label">Techsmith314</div>
+            </div>
+          </div>
+          <a href="https://www.youtube.com/playlist?list=PL1TfRwR30SrW9ruKG7hM-803MU8vmO5YV"
+             target="_blank"
+             rel="noopener noreferrer"
+             style="display:inline-flex;align-items:center;gap:0.5rem;background:linear-gradient(135deg,var(--purple),#6610c4);color:#fff;padding:0.75rem 1.5rem;border-radius:10px;font-weight:700;font-size:0.9rem;width:fit-content;transition:opacity 0.2s;"
+             onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+            Watch Full Playlist →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="section-inner">
+      <p class="section-label">About</p>
+      <h2 class="section-title">Who Is Techsmith314?</h2>
+      <p class="section-sub" style="max-width:680px;">
+        A Canadian content creator and Twitch Partner since 2014, Techsmith314 is all about positive energy, variety gaming, and building a community where everyone feels welcome.
+      </p>
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="about-icon">🎮</div>
+          <h3>Variety Streamer</h3>
+          <p>From RPGs to shooters, strategy to survival — no two streams are the same. If it's a game, it might show up on stream.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">🎲</div>
+          <h3>Dungeon Master</h3>
+          <p>Techsmith314 crafts worlds and tells stories as the DM of Ring and Maker, an original D&amp;D campaign played live on stream.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">🤝</div>
+          <h3>Positive Community</h3>
+          <p>"Low rage, low salt" — a welcoming space for everyone. The community is the heart of everything Techsmith314 does.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">🍁</div>
+          <h3>Canadian Creator</h3>
+          <p>Based in Canada and streaming to the world since 2014, Techsmith314 has built a loyal community over more than a decade.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">📡</div>
+          <h3><span class="stat-highlight">~20K</span>Twitch Followers</h3>
+          <p>A Twitch Partner ranked in the top 0.07% of all channels globally, averaging hundreds of viewers every stream.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">⚔️</div>
+          <h3><span class="stat-highlight">Est. 2014</span>Content Creator</h3>
+          <p>Over a decade of streaming, evolving from games to full multimedia content across Twitch, YouTube, TikTok, and Patreon.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Connect -->
+  <section id="connect">
+    <div class="section-inner">
+      <p class="section-label">Connect</p>
+      <h2 class="section-title">Find Techsmith314 Everywhere</h2>
+      <p class="section-sub" style="max-width:520px; margin: 0 auto 0;">Follow along across all platforms and never miss a stream, video, or campaign session.</p>
+      <div class="social-grid">
+
+        <!-- Twitch -->
+        <a class="social-btn twitch" href="https://www.twitch.tv/techsmith314" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
+          Twitch
+        </a>
+
+        <!-- YouTube -->
+        <a class="social-btn" href="https://www.youtube.com/playlist?list=PL1TfRwR30SrW9ruKG7hM-803MU8vmO5YV" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          YouTube
+        </a>
+
+        <!-- Twitter/X -->
+        <a class="social-btn" href="https://x.com/techsmith314" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Twitter / X
+        </a>
+
+        <!-- TikTok -->
+        <a class="social-btn" href="https://www.tiktok.com/@techsmith314" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.2 8.2 0 0 0 4.79 1.53V6.77a4.85 4.85 0 0 1-1.02-.08z"/></svg>
+          TikTok
+        </a>
+
+        <!-- Patreon -->
+        <a class="social-btn patreon" href="https://www.patreon.com/techsmith314" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.82 2.41c3.96 0 7.18 3.24 7.18 7.21 0 3.96-3.22 7.18-7.18 7.18-3.97 0-7.21-3.22-7.21-7.18 0-3.97 3.24-7.21 7.21-7.21M2 21.6h3.5V2.41H2V21.6z"/></svg>
+          Patreon
+        </a>
+
+        <!-- Bluesky -->
+        <a class="social-btn" href="https://bsky.app/profile/techsmith314.bsky.social" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.206-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8z"/></svg>
+          Bluesky
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <img class="footer-logo" src="Logo.png" alt="Techsmith314" />
+      <div class="footer-divider"></div>
+      <p>© 2026 Techsmith314 · All rights reserved</p>
+      <p style="font-size:0.75rem;">Twitch Partner · Content Creator · Dungeon Master</p>
+    </div>
+  </footer>
+
+  <script>
+    // Dynamically set Twitch embed parent to current hostname
+    (function () {
+      const iframe = document.getElementById('twitch-embed');
+      const parent = window.location.hostname || 'localhost';
+      iframe.src = `https://player.twitch.tv/?channel=techsmith314&parent=${parent}&autoplay=false`;
+    })();
+  </script>
+
+</body>
+</html>
